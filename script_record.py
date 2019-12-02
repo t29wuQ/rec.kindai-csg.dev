@@ -6,5 +6,5 @@ capture = cv2.VideoCapture(0)
 
 while(True):
     ret, frame = capture.read()
-    cv2.imwrite(str(time.time())+'.jpg', frame)
+    cv2.imwrite("/home/recorder/rec.kindai-csg.dev/recording"+str(time.time())+'.jpg', frame)
  
