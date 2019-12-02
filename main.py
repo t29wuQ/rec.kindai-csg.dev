@@ -1,8 +1,11 @@
 import cv2
 import base64
+import threading
 from flask import Flask, request, render_template
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
+
+from record import recording_save_img
 
 app = Flask(__name__)
 capture = cv2.VideoCapture(0)
@@ -17,15 +20,16 @@ def live():
     if request.environ.get('wsgi.websocket'):
         ws = request.environ['wsgi.websocket']
         while True:
-            ret, frame = capture.read()
-            cv2.imwrite('latest.jpg', frame)
-            result, encimg = cv2.imencode('.jpg', frame, encode_param)
-            ws.send(base64.b64encode(encimg).decode('ascii'))
+            with open('./latest.jpg', 'rb') as f:
+                ws.send(base64.b64encode(f.read()).decode('ascii'))
 
 def main():
+    record_thread = threading.Thread(target=recording_save_img, args=(capture,))
+    record_thread.start()
     app.debug = True
     server = pywsgi.WSGIServer(("", 8080), app, handler_class=WebSocketHandler)
     server.serve_forever()
+    
 
 
 if __name__ == '__main__':
