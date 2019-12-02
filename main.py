@@ -20,7 +20,7 @@ def live():
     if request.environ.get('wsgi.websocket'):
         ws = request.environ['wsgi.websocket']
         while True:
-            with open('./latest.jpg', 'rb') as f:
+            with open('/home/recorder/rec.kindai-csg.dev/latest.jpg', 'rb') as f:
                 ws.send(base64.b64encode(f.read()).decode('ascii'))
 
 def main():
