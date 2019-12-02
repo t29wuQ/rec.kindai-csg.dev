@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>●REC</title>
+    </head>
+    <body>
+        <img id="player" src=""/>
+        <script type="text/javascript">
+            const ws = new WebSocket("ws://rec.kindai-csg.dev/live");
+            const player = document.getElementById("player")
+            ws.onmessage = function(e) {
+                player.setAttribute("src", "data:image/jpg;base64,"+e.data)
+            }
+        </script>
+    </body>
+</html>
