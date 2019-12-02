@@ -1,5 +1,4 @@
 import cv2
-import time
 import base64
 from flask import Flask, request, render_template
 from gevent import pywsgi
@@ -20,7 +19,6 @@ def live():
         while True:
             ret, frame = capture.read()
             cv2.imwrite('latest.jpg', frame)
-            cv2.imwrite(str(time.time())+'.jpg', frame)
             result, encimg = cv2.imencode('.jpg', frame, encode_param)
             ws.send(base64.b64encode(encimg).decode('ascii'))
 
